@@ -275,6 +275,34 @@
             </div>
         </section>
 
+        <!-- Section 6: Future Operation Strategy (New Addition) -->
+        <section class="card p-6 md:p-8 bg-gradient-to-br from-white to-pink-50 border-pink-100">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold mb-2">今後の効果的な運用ロードマップ</h3>
+                <p class="text-gray-600">
+                    アルゴリズム変更に適応した、目的別の最適解です。あなたの現在のフェーズを選んでください。
+                </p>
+            </div>
+
+            <!-- Strategy Tabs -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <button onclick="showStrategy('reach')" id="strat-btn-reach" class="px-6 py-2 rounded-full font-bold text-sm transition-all bg-gray-200 text-gray-600 hover:bg-gray-300">
+                    🚀 認知・フォロワー拡大
+                </button>
+                <button onclick="showStrategy('fan')" id="strat-btn-fan" class="px-6 py-2 rounded-full font-bold text-sm transition-all bg-gray-200 text-gray-600 hover:bg-gray-300">
+                    🤝 ファン化・信頼構築
+                </button>
+                <button onclick="showStrategy('sales')" id="strat-btn-sales" class="px-6 py-2 rounded-full font-bold text-sm transition-all bg-gray-200 text-gray-600 hover:bg-gray-300">
+                    💰 集客・売上アップ
+                </button>
+            </div>
+
+            <!-- Strategy Content Container -->
+            <div id="strategy-content" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 min-h-[300px]">
+                <!-- Content injected via JS -->
+            </div>
+        </section>
+
     </main>
 
     <footer class="bg-gray-100 border-t border-gray-200 mt-12 py-8 text-center">
@@ -316,6 +344,46 @@
             { title: "90秒以内", desc: "Reelsの場合、完了率を高めるために長すぎないか？", icon: "⏱️" },
             { title: "高画質", desc: "ぼやけていないか？AIによる低評価を避けるため必須。", icon: "✨" }
         ];
+
+        // 3. Strategy Data (New)
+        const strategies = {
+            reach: {
+                title: "🚀 認知・フォロワー拡大戦略",
+                color: "text-blue-600",
+                bg: "bg-blue-50",
+                kpi: "リーチ数、シェア数 (Sends)",
+                focus: [
+                    "<strong>Reels 100%</strong>: 写真投稿は一旦捨て、Reelsに全振りする。",
+                    "<strong>トレンド音源×オリジナル映像</strong>: 流行りの音源を使いつつ、映像は自分で撮った独自素材を使う（AI判定対策）。",
+                    "<strong>「共感」か「保存」</strong>: 「あるある」でシェアを狙うか、「役立つ」で保存→見返しを狙うかの2択に絞る。"
+                ],
+                action: "毎日投稿よりも「週3回の高品質Reels」を優先。投稿後1時間はコメント返信を最速で行い、初期エンゲージメントを高める。"
+            },
+            fan: {
+                title: "🤝 ファン化・信頼構築戦略",
+                color: "text-pink-600",
+                bg: "bg-pink-50",
+                kpi: "ストーリーズ閲覧率、DM数",
+                focus: [
+                    "<strong>ストーリーズでの自己開示</strong>: 完璧な姿ではなく、裏側や失敗談を見せて「親近感」を醸成する。",
+                    "<strong>インタラクティブスタンプ</strong>: 質問箱、アンケートを多用し、フォロワーに「タップ」させる癖をつける。",
+                    "<strong>DM返信はマスト</strong>: シグナルにおいて「DMでの会話」は最強の親密度スコアを持つ。"
+                ],
+                action: "ストーリーズは1日3〜5回分散投稿。朝の挨拶、昼の様子、夜の質問返しなど、ザイオンス効果（単純接触効果）を狙う。"
+            },
+            sales: {
+                title: "💰 集客・売上アップ戦略",
+                color: "text-green-600",
+                bg: "bg-green-50",
+                kpi: "プロフィールクリック数、外部リンク誘導数",
+                focus: [
+                    "<strong>フィードカルーセル（画像）</strong>: 商品やサービスの詳細は、じっくり読める画像投稿で教育する。",
+                    "<strong>ハイライトの整備</strong>: 「お客様の声」「サービス詳細」「Q&A」を整え、LP（ランディングページ）代わりにする。",
+                    "<strong>インスタライブ</strong>: リアルタイムで質問に答え、不安を払拭してクロージングする。"
+                ],
+                action: "Reelsで集め、ストーリーズで教育し、プロフィールリンク/ハイライトで刈り取る導線を固定化する。"
+            }
+        };
 
         // --- CHART INITIALIZATION ---
         
@@ -509,12 +577,53 @@
             });
         }
 
+        // 5. Strategy Logic (New)
+        window.showStrategy = function(key) {
+            const data = strategies[key];
+            const container = document.getElementById('strategy-content');
+            
+            // Generate list items
+            const focusList = data.focus.map(item => `<li class="flex items-start"><span class="mr-2 mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-400 flex-shrink-0"></span><span class="text-gray-700">${item}</span></li>`).join('');
+
+            container.innerHTML = `
+                <div class="animate-fade-in">
+                    <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
+                        <h4 class="text-xl font-bold ${data.color}">${data.title}</h4>
+                        <div class="text-xs font-bold px-3 py-1 rounded-full ${data.bg} ${data.color}">KPI: ${data.kpi}</div>
+                    </div>
+                    <div class="mb-6">
+                        <h5 class="font-bold text-gray-900 mb-3">🎯 重点アクション</h5>
+                        <ul class="space-y-3 text-sm leading-relaxed">
+                            ${focusList}
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h5 class="font-bold text-gray-800 text-sm mb-1">📅 推奨ルーティン</h5>
+                        <p class="text-gray-600 text-sm">${data.action}</p>
+                    </div>
+                </div>
+            `;
+
+            // Update Buttons
+            ['reach', 'fan', 'sales'].forEach(k => {
+                const btn = document.getElementById(`strat-btn-${k}`);
+                if (k === key) {
+                    btn.classList.remove('bg-gray-200', 'text-gray-600');
+                    btn.classList.add('bg-gray-900', 'text-white', 'shadow-md');
+                } else {
+                    btn.classList.add('bg-gray-200', 'text-gray-600');
+                    btn.classList.remove('bg-gray-900', 'text-white', 'shadow-md');
+                }
+            });
+        };
+
         // --- INIT ---
         window.addEventListener('DOMContentLoaded', () => {
             initChart();
             renderChecklist();
-            calculateScore(); // Run once to set initial state
-            setFunnelStep(1); // Set initial funnel step
+            calculateScore(); 
+            setFunnelStep(1); 
+            showStrategy('reach'); // Init strategy
         });
 
     </script>
