@@ -1,345 +1,631 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Coffee, Camera, FileText, ChevronDown, Instagram, Twitter, Mail, ExternalLink, Play } from 'lucide-react';
-
-const Portfolio = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Scroll detection for navbar styling
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (id) => {
-    setIsMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const fadeInUp = "transition-all duration-1000 ease-out transform opacity-0 translate-y-10"; 
-
-  /**
-   * 画像アセットの設定
-   * ※重要: 現在はプレビュー用にUnsplashのサンプル画像を表示しています。
-   * 実際のサイト公開時には、ここをお手持ちの画像ファイルへのパスに書き換えてください。
-   */
-  const assets = {
-    // 動画の代わりのサムネイル画像 (元ファイル: 15721787265048.mp4)
-    videoThumbnail: "https://images.unsplash.com/photo-1570968992193-6e5c9a479248?auto=format&fit=crop&w=1200&q=80",
-    
-    // メインギャラリー画像 (元ファイル: IMG_0878.jpg)
-    mainGallery: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1200&q=80",
-
-    // グリッド画像 (元ファイル: IMG_6601.jpg, IMG_9423.jpg, IMG_1402.jpg, IMG_9712.jpg)
-    galleryImages: [
-      "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=600&q=80", // カフェの雰囲気
-      "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80", // コーヒー豆
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80", // カメラ
-      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80"  // ドリップ
-    ]
-  };
-
-  return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-gray-900 selection:text-white">
-      
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'}`}>
-        <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-          <div className="text-xl font-bold tracking-widest uppercase cursor-pointer" onClick={() => scrollToSection('hero')}>
-            Yusuke Kosugi
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
-            {['About', 'History', 'Hobbies', 'Gallery', 'Contact'].map((item) => (
-              <button 
-                key={item} 
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="hover:text-gray-500 transition-colors uppercase"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2">
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu Overlay */}
-        {isMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white border-t border-gray-100 flex flex-col items-center py-8 space-y-6 md:hidden shadow-lg">
-            {['About', 'History', 'Hobbies', 'Gallery', 'Contact'].map((item) => (
-              <button 
-                key={item} 
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="text-lg font-medium tracking-wide hover:text-gray-500 uppercase"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        )}
-      </nav>
-
-      {/* Hero Section */}
-      <section id="hero" className="h-screen flex flex-col justify-center items-center relative px-6">
-        <div className="text-center space-y-6 max-w-4xl animate-fade-in-up">
-          <p className="text-sm md:text-base text-gray-500 tracking-[0.3em] uppercase mb-4">Self Introduction</p>
-          <h1 className="text-5xl md:text-8xl font-bold tracking-tight text-gray-900 mb-6">
-            YUSUKE<br className="md:hidden" /> KOSUGI
-          </h1>
-          <p className="text-gray-600 text-sm md:text-lg max-w-xl mx-auto leading-relaxed font-light">
-            この自己紹介を通じて少しでも<br className="hidden md:inline"/>
-            “小杉悠介”について知っていただけたら嬉しいです!
-          </p>
-          <div className="pt-8">
-            <span className="inline-block w-px h-24 bg-gray-300"></span>
-          </div>
-        </div>
-        
-        <div className="absolute bottom-10 animate-bounce cursor-pointer" onClick={() => scrollToSection('about')}>
-          <ChevronDown size={32} className="text-gray-400" />
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-24 md:py-32 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row gap-16">
-            <div className="md:w-1/3">
-              <h2 className="text-3xl font-bold mb-6 relative inline-block">
-                About Me
-                <span className="absolute -bottom-2 left-0 w-12 h-1 bg-black"></span>
-              </h2>
-              <p className="text-gray-500 text-sm tracking-wider mb-8">PERSONAL PROFILE</p>
-            </div>
-            
-            <div className="md:w-2/3 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
-                <div>
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Name</h3>
-                  <p className="text-lg font-medium">小杉 悠介 <span className="text-sm text-gray-500 font-normal ml-2">Yusuke Kosugi</span></p>
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Birthday</h3>
-                  <p className="text-lg font-medium">1998/05/16 <span className="text-sm text-gray-500 font-normal ml-2">(Age: 24)</span></p>
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Blood Type</h3>
-                  <p className="text-lg font-medium">Type A</p>
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Family Structure</h3>
-                  <p className="text-lg font-medium">Mom / Dad / Sis / Sis / Bro / Me</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* History Section (Education & Work) */}
-      <section id="history" className="py-24 md:py-32">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16">
-            
-            {/* Education */}
-            <div>
-              <h2 className="text-2xl font-bold mb-12 flex items-center gap-3">
-                <span className="w-8 h-[1px] bg-black"></span> EDUCATION
-              </h2>
-              <div className="space-y-12 border-l border-gray-200 ml-3 pl-8 relative">
-                <div className="relative">
-                  <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-white border-4 border-gray-900"></div>
-                  <h3 className="text-sm text-gray-500 tracking-wider mb-1">Highschool</h3>
-                  <p className="text-lg font-medium">東京成徳大学高等学校</p>
-                </div>
-                <div className="relative">
-                  <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-white border-4 border-gray-900"></div>
-                  <h3 className="text-sm text-gray-500 tracking-wider mb-1">College & Department</h3>
-                  <p className="text-lg font-medium">芝浦工業大学<br/>工学部機械工学科</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Work */}
-            <div>
-              <h2 className="text-2xl font-bold mb-12 flex items-center gap-3">
-                <span className="w-8 h-[1px] bg-black"></span> WORK
-              </h2>
-              <div className="space-y-12 border-l border-gray-200 ml-3 pl-8 relative">
-                <div className="relative">
-                  <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-gray-300"></div>
-                  <h3 className="text-sm text-gray-500 tracking-wider mb-1">Experience</h3>
-                  <p className="text-lg font-medium">Cram School Teacher</p>
-                  <p className="text-sm text-gray-500 mt-1">塾講師</p>
-                </div>
-                <div className="relative">
-                  <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-gray-300"></div>
-                  <h3 className="text-sm text-gray-500 tracking-wider mb-1">Experience</h3>
-                  <p className="text-lg font-medium">Barista</p>
-                  <p className="text-sm text-gray-500 mt-1">バリスタ</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Hobbies Section */}
-      <section id="hobbies" className="py-24 md:py-32 bg-gray-900 text-white">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-16 tracking-wider">HOBBIES</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Hobby 1 */}
-            <div className="group p-10 border border-gray-800 hover:border-white transition-all duration-500 bg-gray-900">
-              <div className="flex justify-center mb-6">
-                <Coffee size={48} className="text-gray-400 group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Coffee & Latte</h3>
-              <p className="text-gray-400 text-sm">Espresso, Hand drip, Latte Art</p>
-            </div>
-
-            {/* Hobby 2 */}
-            <div className="group p-10 border border-gray-800 hover:border-white transition-all duration-500 bg-gray-900">
-              <div className="flex justify-center mb-6">
-                <Camera size={48} className="text-gray-400 group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Photo & Video</h3>
-              <p className="text-gray-400 text-sm">Photography, Videography, Editing</p>
-            </div>
-
-            {/* Hobby 3 */}
-            <div className="group p-10 border border-gray-800 hover:border-white transition-all duration-500 bg-gray-900">
-              <div className="flex justify-center mb-6">
-                <FileText size={48} className="text-gray-400 group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Notion</h3>
-              <p className="text-gray-400 text-sm">Productivity, Organization, Design</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Section */}
-      <section id="gallery" className="py-24 md:py-32 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-4 text-center">My Gallery</h2>
-          <p className="text-center text-gray-500 mb-16 tracking-widest uppercase text-sm">Selected Works</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-8">
-            {/* Video Area (Using Image Thumbnail for Preview) */}
-            <div className="group relative overflow-hidden aspect-video bg-black cursor-pointer shadow-lg">
-              <img 
-                src={assets.videoThumbnail} 
-                alt="Latte Art Video Thumbnail" 
-                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform">
-                    <Play size={32} fill="white" className="text-white ml-1" />
-                 </div>
-              </div>
-              <div className="absolute top-4 left-4 z-10">
-                 <span className="text-white/80 text-xs font-bold tracking-widest border border-white/30 px-2 py-1 uppercase">Latte Art</span>
-              </div>
-            </div>
-
-            {/* Photo Gallery Main */}
-            <div className="group relative overflow-hidden aspect-video bg-gray-100 cursor-pointer shadow-lg">
-              <img 
-                src={assets.mainGallery} 
-                alt="Main Gallery" 
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-              <div className="absolute bottom-6 left-6 text-white">
-                 <h3 className="text-xl font-bold tracking-wider mb-1">PHOTO GALLERY</h3>
-                 <p className="text-xs uppercase tracking-widest opacity-80">View Collection</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* Small Grid Photos */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-             {assets.galleryImages.map((img, index) => (
-               <div key={index} className="aspect-square bg-gray-100 overflow-hidden group relative">
-                 <img 
-                   src={img} 
-                   alt={`Gallery ${index + 1}`} 
-                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                 />
-                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
-               </div>
-             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Message / Footer Section */}
-      <section id="contact" className="py-32 bg-gray-50 text-center px-6">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-light mb-12">The End</h2>
-          
-          <p className="text-lg md:text-xl leading-loose font-medium mb-12 text-gray-800">
-            まだまだできないことだらけですが<br />
-            爆速で成長していくので<br />
-            みなさんどうぞよろしくお願いします！
-          </p>
-
-          <p className="text-gray-500 text-sm mb-16">
-            ご清聴ありがとうございました。
-          </p>
-          
-          <div className="flex justify-center space-x-8 mb-16">
-            <a href="#" className="p-3 bg-white rounded-full shadow-sm hover:shadow-md transition-all text-gray-800 hover:text-black">
-              <Instagram size={20} />
-            </a>
-            <a href="#" className="p-3 bg-white rounded-full shadow-sm hover:shadow-md transition-all text-gray-800 hover:text-black">
-              <Twitter size={20} />
-            </a>
-            <a href="#" className="p-3 bg-white rounded-full shadow-sm hover:shadow-md transition-all text-gray-800 hover:text-black">
-              <Mail size={20} />
-            </a>
-          </div>
-
-          <div className="border-t border-gray-200 pt-8">
-            <p className="text-xs text-gray-400 tracking-wider">
-              2021 BLAM, inc. | Designed by Yusuke Kosugi
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Global CSS for utilities not in Tailwind default config if needed */}
-      <style>{`
-        .animate-fade-in-up {
-          animation: fadeInUp 1s ease-out forwards;
-          opacity: 0;
-          transform: translateY(20px);
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Algorithm Decoder 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fafafa; /* Instagram Light Gray */
+            color: #262626;
         }
-        @keyframes fadeInUp {
-          to {
+        .gradient-text {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+        .card {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .interactive-btn {
+            transition: all 0.2s;
+        }
+        .interactive-btn:active {
+            transform: scale(0.95);
+        }
+        /* Chart Container Styling - Mandatory */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .funnel-step {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .funnel-hidden {
+            opacity: 0.3;
+            transform: scale(0.95);
+            filter: grayscale(100%);
+        }
+        .funnel-active {
             opacity: 1;
-            transform: translateY(0);
-          }
+            transform: scale(1);
+            filter: grayscale(0%);
+            border-color: #e1306c;
+            background-color: #fff0f5;
         }
-      `}</style>
-    </div>
-  );
-};
+    </style>
+    <!-- Chosen Palette: Instagram Modern (White, Light Gray #fafafa, Dark Gray #262626, Brand Gradient for Accents) -->
+    <!-- Application Structure Plan: 
+         1. Hero: Overview of the major "Distribution" update.
+         2. Algorithm Signal Comparator: Tabbed interface updating a Radar Chart to show weighting differences (Reels vs Stories vs Feed).
+         3. The Viral Funnel: Vertical step-by-step interactive flow showing the new "Small Creator" recommendation path.
+         4. Metric Calculator: A simple input tool emphasizing the value of "Shares/Sends" over "Likes".
+         5. SEO & Originality Checklist: Interactive list for actionable takeaways.
+         Why: Breaks down complex "black box" logic into isolated, interactive experiments for better understanding.
+    -->
+    <!-- Visualization & Content Choices:
+         - Radar Chart: Best for comparing multivariate data (ranking signals) across categories (formats).
+         - Interactive List (Funnel): Simulates the sequential nature of algorithmic distribution.
+         - Bar Chart (in Calculator): Visualizes the disproportionate impact of different engagement types.
+         - NO SVG/Mermaid: All visuals built with HTML/CSS or Chart.js.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-gray-50 text-gray-800">
 
-export default Portfolio;
+    <!-- Navigation / Header -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight">Instagram<span class="gradient-text">AlgoDecoder</span> 2025</h1>
+            <div class="text-xs font-medium bg-gray-100 px-2 py-1 rounded text-gray-500">Latest Research Update</div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- Section 1: Introduction -->
+        <header class="text-center space-y-4 max-w-3xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900">アルゴリズムは<br><span class="gradient-text">「発見」と「対話」</span>へ</h2>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                2024年後半から2025年にかけて、Instagramは根本的な変更を行いました。
+                最大のテーマは<strong>「オリジナルコンテンツの優遇」</strong>と<strong>「Sends（シェア）の重要性」</strong>です。
+                フォロワー数に関係なく、適切なコンテンツが評価される新しい仕組みを解き明かしましょう。
+            </p>
+        </header>
+
+        <!-- Section 2: Ranking Signal Analyzer (Radar Chart) -->
+        <section class="card p-6 md:p-8">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold mb-2">フォーマット別ランキングシグナル</h3>
+                <p class="text-gray-600 text-sm">
+                    Reels、Stories、フィード投稿では、アルゴリズムが重視する指標（シグナル）が全く異なります。
+                    下のボタンを切り替えて、それぞれのフォーマットで「何が重要か」を確認してください。
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <!-- Controls -->
+                <div class="w-full md:w-1/3 space-y-3">
+                    <button onclick="updateChart('reels')" id="btn-reels" class="interactive-btn w-full text-left px-4 py-3 rounded-lg border-2 border-transparent bg-gray-50 hover:bg-gray-100 font-bold focus:outline-none ring-offset-2 focus:ring-2 focus:ring-pink-500 transition-colors active-mode">
+                        🎬 Reels (リール)
+                        <span class="block text-xs font-normal text-gray-500 mt-1">新たな視聴者へのリーチに最適</span>
+                    </button>
+                    <button onclick="updateChart('stories')" id="btn-stories" class="interactive-btn w-full text-left px-4 py-3 rounded-lg border-2 border-transparent bg-gray-50 hover:bg-gray-100 font-bold focus:outline-none ring-offset-2 focus:ring-2 focus:ring-pink-500 transition-colors">
+                        ⭕ Stories (ストーリーズ)
+                        <span class="block text-xs font-normal text-gray-500 mt-1">既存フォロワーとの親密度</span>
+                    </button>
+                    <button onclick="updateChart('feed')" id="btn-feed" class="interactive-btn w-full text-left px-4 py-3 rounded-lg border-2 border-transparent bg-gray-50 hover:bg-gray-100 font-bold focus:outline-none ring-offset-2 focus:ring-2 focus:ring-pink-500 transition-colors">
+                        🖼️ Feed (フィード)
+                        <span class="block text-xs font-normal text-gray-500 mt-1">バランス型・情報保存</span>
+                    </button>
+                    
+                    <div id="signal-explanation" class="mt-6 p-4 bg-blue-50 text-blue-800 rounded-md text-sm border-l-4 border-blue-500">
+                        <!-- Dynamic explanation will appear here -->
+                    </div>
+                </div>
+
+                <!-- Radar Chart -->
+                <div class="w-full md:w-2/3 flex justify-center">
+                    <div class="chart-container">
+                        <canvas id="signalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The New Distribution Funnel -->
+        <section class="grid md:grid-cols-2 gap-8 items-start">
+            <div>
+                <h3 class="text-2xl font-bold mb-4">新しい「リーチ拡大」の仕組み</h3>
+                <p class="text-gray-600 mb-6">
+                    以前はフォロワー数が多いアカウントが圧倒的に有利でした。しかし最新のアップデートでは、
+                    <strong>「すべての投稿が、まずは少数の非フォロワーを含むオーディエンスでテストされる」</strong>仕組みに変更されました。
+                    これにより、小規模なアカウントでもコンテンツが良ければバズるチャンスが均等化されています。
+                </p>
+                
+                <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6">
+                    <h4 class="font-bold text-yellow-800 text-sm mb-1">💡 重要な変更点</h4>
+                    <p class="text-yellow-900 text-sm">
+                        アグリゲーター（他人の転載）アカウントは推奨から除外され、オリジナル作成者が優先的に表示されるようになりました。
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="font-bold text-gray-700">ステップをタップしてシミュレーション:</p>
+                    <button onclick="setFunnelStep(1)" class="w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium">Step 1: 投稿直後</button>
+                    <button onclick="setFunnelStep(2)" class="w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium">Step 2: エンゲージメントテスト</button>
+                    <button onclick="setFunnelStep(3)" class="w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium">Step 3: 類似ユーザーへ拡大</button>
+                    <button onclick="setFunnelStep(4)" class="w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium">Step 4: バイラル（発見タブ）</button>
+                </div>
+            </div>
+
+            <!-- Interactive Funnel Visual -->
+            <div class="bg-gray-900 text-white p-6 rounded-xl relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600"></div>
+                
+                <!-- Funnel Step 1 -->
+                <div id="f-step-1" class="funnel-step border-l-4 border-gray-600 pl-4 py-2 mb-4 funnel-active">
+                    <div class="text-xs text-gray-400 uppercase tracking-widest">Initial Phase</div>
+                    <div class="text-xl font-bold text-white">スモールテスト</div>
+                    <p class="text-sm text-gray-300 mt-1">あなたの投稿はまず、フォロワーの一部と、あなたに興味がありそうな少数の非フォロワーに表示されます。</p>
+                </div>
+
+                <!-- Funnel Step 2 -->
+                <div id="f-step-2" class="funnel-step border-l-4 border-gray-600 pl-4 py-2 mb-4 funnel-hidden">
+                    <div class="text-xs text-gray-400 uppercase tracking-widest">Signal Check</div>
+                    <div class="text-xl font-bold text-white">シグナル判定</div>
+                    <p class="text-sm text-gray-300 mt-1">「視聴完了率」と「Sends（シェア）」が特に重視されます。「いいね」だけでは不十分です。</p>
+                </div>
+
+                <!-- Funnel Step 3 -->
+                <div id="f-step-3" class="funnel-step border-l-4 border-gray-600 pl-4 py-2 mb-4 funnel-hidden">
+                    <div class="text-xs text-gray-400 uppercase tracking-widest">Expansion</div>
+                    <div class="text-xl font-bold text-white">リーチ拡大</div>
+                    <p class="text-sm text-gray-300 mt-1">シグナルが良好な場合、より広い類似オーディエンスへ配信されます。ここでオリジナルかどうかが厳しく判定されます。</p>
+                </div>
+
+                <!-- Funnel Step 4 -->
+                <div id="f-step-4" class="funnel-step border-l-4 border-gray-600 pl-4 py-2 mb-4 funnel-hidden">
+                    <div class="text-xs text-gray-400 uppercase tracking-widest">Viral</div>
+                    <div class="text-xl font-bold text-white">トップ表示</div>
+                    <p class="text-sm text-gray-300 mt-1">発見タブの上位やReelsタブのおすすめに長時間掲載され、フォロワー外からの流入が爆発します。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Engagement Value Calculator -->
+        <section class="card p-6 md:p-8">
+            <h3 class="text-2xl font-bold mb-4">「Sends（シェア）」は新しい「いいね」</h3>
+            <p class="text-gray-600 mb-6">
+                Instagramの責任者Adam Mosseri氏は「Sends（DMでのシェア）はリーチにおける最も重要な指標の一つ」と明言しています。
+                以下のシミュレーターで、アクションの違いがどれだけ「推定リーチスコア」に影響するか試してみてください。
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">❤️ いいね数 (Likes)</label>
+                        <input type="range" id="input-likes" min="0" max="1000" value="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-pink-600">
+                        <div class="text-right text-sm font-bold text-pink-600" id="val-likes">100</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">💬 コメント数 (Comments)</label>
+                        <input type="range" id="input-comments" min="0" max="200" value="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600">
+                        <div class="text-right text-sm font-bold text-purple-600" id="val-comments">10</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">💾 保存数 (Saves)</label>
+                        <input type="range" id="input-saves" min="0" max="200" value="20" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                        <div class="text-right text-sm font-bold text-orange-500" id="val-saves">20</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">🚀 シェア数 (Sends) <span class="bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded ml-2">重要</span></label>
+                        <input type="range" id="input-shares" min="0" max="200" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        <div class="text-right text-sm font-bold text-blue-600" id="val-shares">5</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center items-center text-center">
+                    <div class="text-sm text-gray-500 mb-2">推定アルゴリズムスコア</div>
+                    <div class="text-5xl font-black gradient-text mb-4" id="total-score">0</div>
+                    <p class="text-xs text-gray-400">※このスコアは、公式発表とリサーチに基づいた独自の重み付けによる推定値です。</p>
+                    
+                    <div class="mt-6 w-full space-y-2">
+                        <div class="flex justify-between text-xs text-gray-600">
+                            <span>Like Contribution</span>
+                            <span id="pct-likes">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                            <div id="bar-likes" class="bg-pink-500 h-1.5 rounded-full" style="width: 0%"></div>
+                        </div>
+
+                        <div class="flex justify-between text-xs text-gray-600 pt-2">
+                            <span>Share Contribution</span>
+                            <span id="pct-shares">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                            <div id="bar-shares" class="bg-blue-600 h-1.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Actionable Checklist -->
+        <section>
+            <h3 class="text-2xl font-bold mb-6">2025年版 投稿最適化チェックリスト</h3>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Checklist Items generated by JS -->
+                <div id="checklist-container" class="contents">
+                    <!-- Items inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Future Operation Strategy (New Addition) -->
+        <section class="card p-6 md:p-8 bg-gradient-to-br from-white to-pink-50 border-pink-100">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold mb-2">今後の効果的な運用ロードマップ</h3>
+                <p class="text-gray-600">
+                    アルゴリズム変更に適応した、目的別の最適解です。あなたの現在のフェーズを選んでください。
+                </p>
+            </div>
+
+            <!-- Strategy Tabs -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <button onclick="showStrategy('reach')" id="strat-btn-reach" class="px-6 py-2 rounded-full font-bold text-sm transition-all bg-gray-200 text-gray-600 hover:bg-gray-300">
+                    🚀 認知・フォロワー拡大
+                </button>
+                <button onclick="showStrategy('fan')" id="strat-btn-fan" class="px-6 py-2 rounded-full font-bold text-sm transition-all bg-gray-200 text-gray-600 hover:bg-gray-300">
+                    🤝 ファン化・信頼構築
+                </button>
+                <button onclick="showStrategy('sales')" id="strat-btn-sales" class="px-6 py-2 rounded-full font-bold text-sm transition-all bg-gray-200 text-gray-600 hover:bg-gray-300">
+                    💰 集客・売上アップ
+                </button>
+            </div>
+
+            <!-- Strategy Content Container -->
+            <div id="strategy-content" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 min-h-[300px]">
+                <!-- Content injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 border-t border-gray-200 mt-12 py-8 text-center">
+        <p class="text-gray-500 text-sm">&copy; 2025 Instagram Algorithm Decoder. Based on latest Meta announcements & analysis.</p>
+    </footer>
+
+    <script>
+        // --- DATA & STATE ---
+
+        // 1. Radar Chart Data
+        // Weights based on general consensus of 2024/2025 algorithm behavior
+        const algorithmData = {
+            reels: {
+                label: 'Reels (リール)',
+                data: [90, 85, 30, 40, 95], // [Watch Time, Shares, Comments, Likes, Audio/Visual Quality]
+                desc: 'Reelsは「エンターテインメント」です。最後まで見られること(完了率)と、友達にシェアされること(Sends)が爆発的な拡散の鍵です。'
+            },
+            stories: {
+                label: 'Stories (ストーリーズ)',
+                data: [40, 50, 60, 50, 90], // [Watch Time, Shares, Comments, Likes, Relationship/Closeness]
+                // Note: The 5th axis label will change slightly in context, but using fixed axes for chart
+                desc: 'Storiesは「親密度」です。DMでのリアクションや、特定のアカウントへの関心の高さ（Closeness）が最優先されます。'
+            },
+            feed: {
+                label: 'Feed (フィード)',
+                data: [60, 70, 80, 60, 50],
+                desc: 'フィードは「総合力」です。コメントによる対話、保存による見返し、そしてシェア。滞在時間も重要な要素です。'
+            }
+        };
+
+        const signalLabels = ['滞在時間 (Watch Time)', 'シェア (Sends)', 'コメント (Comms)', 'いいね (Likes)', '関係性/品質 (Signals)'];
+
+        // 2. Checklist Data
+        const checklistItems = [
+            { title: "SEOキーワード", desc: "キャプションとハッシュタグに検索されやすい単語を入れたか？", icon: "🔍" },
+            { title: "透かしなし", desc: "TikTokなどのロゴが入っていないオリジナル動画か？", icon: "🚫" },
+            { title: "最初の3秒", desc: "視聴者を止めるフック（視覚・聴覚）があるか？", icon: "⚡" },
+            { title: "CTA (シェア)", desc: "「友達に送ってね」などシェアを促す動線があるか？", icon: "📤" },
+            { title: "90秒以内", desc: "Reelsの場合、完了率を高めるために長すぎないか？", icon: "⏱️" },
+            { title: "高画質", desc: "ぼやけていないか？AIによる低評価を避けるため必須。", icon: "✨" }
+        ];
+
+        // 3. Strategy Data (New)
+        const strategies = {
+            reach: {
+                title: "🚀 認知・フォロワー拡大戦略",
+                color: "text-blue-600",
+                bg: "bg-blue-50",
+                kpi: "リーチ数、シェア数 (Sends)",
+                focus: [
+                    "<strong>Reels 100%</strong>: 写真投稿は一旦捨て、Reelsに全振りする。",
+                    "<strong>トレンド音源×オリジナル映像</strong>: 流行りの音源を使いつつ、映像は自分で撮った独自素材を使う（AI判定対策）。",
+                    "<strong>「共感」か「保存」</strong>: 「あるある」でシェアを狙うか、「役立つ」で保存→見返しを狙うかの2択に絞る。"
+                ],
+                action: "毎日投稿よりも「週3回の高品質Reels」を優先。投稿後1時間はコメント返信を最速で行い、初期エンゲージメントを高める。"
+            },
+            fan: {
+                title: "🤝 ファン化・信頼構築戦略",
+                color: "text-pink-600",
+                bg: "bg-pink-50",
+                kpi: "ストーリーズ閲覧率、DM数",
+                focus: [
+                    "<strong>ストーリーズでの自己開示</strong>: 完璧な姿ではなく、裏側や失敗談を見せて「親近感」を醸成する。",
+                    "<strong>インタラクティブスタンプ</strong>: 質問箱、アンケートを多用し、フォロワーに「タップ」させる癖をつける。",
+                    "<strong>DM返信はマスト</strong>: シグナルにおいて「DMでの会話」は最強の親密度スコアを持つ。"
+                ],
+                action: "ストーリーズは1日3〜5回分散投稿。朝の挨拶、昼の様子、夜の質問返しなど、ザイオンス効果（単純接触効果）を狙う。"
+            },
+            sales: {
+                title: "💰 集客・売上アップ戦略",
+                color: "text-green-600",
+                bg: "bg-green-50",
+                kpi: "プロフィールクリック数、外部リンク誘導数",
+                focus: [
+                    "<strong>フィードカルーセル（画像）</strong>: 商品やサービスの詳細は、じっくり読める画像投稿で教育する。",
+                    "<strong>ハイライトの整備</strong>: 「お客様の声」「サービス詳細」「Q&A」を整え、LP（ランディングページ）代わりにする。",
+                    "<strong>インスタライブ</strong>: リアルタイムで質問に答え、不安を払拭してクロージングする。"
+                ],
+                action: "Reelsで集め、ストーリーズで教育し、プロフィールリンク/ハイライトで刈り取る導線を固定化する。"
+            }
+        };
+
+        // --- CHART INITIALIZATION ---
+        
+        let radarChart;
+
+        function initChart() {
+            const ctx = document.getElementById('signalChart').getContext('2d');
+            
+            // Initial Data: Reels
+            const initData = algorithmData.reels;
+
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: signalLabels,
+                    datasets: [{
+                        label: initData.label,
+                        data: initData.data,
+                        backgroundColor: 'rgba(225, 48, 108, 0.2)', // Instagram Pink transparent
+                        borderColor: 'rgba(225, 48, 108, 1)',
+                        pointBackgroundColor: 'rgba(225, 48, 108, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(225, 48, 108, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#dbdbdb' },
+                            grid: { color: '#dbdbdb' },
+                            pointLabels: {
+                                font: { size: 12, family: "'Noto Sans JP', sans-serif", weight: 'bold' },
+                                color: '#262626'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false } // Hide numbers for cleaner look
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ": " + context.raw + "/100 重要度";
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Set initial description and button state
+            document.getElementById('signal-explanation').textContent = initData.desc;
+            document.getElementById('btn-reels').classList.add('ring-2', 'ring-pink-500', 'bg-gray-100');
+        }
+
+        // --- INTERACTION LOGIC ---
+
+        // 1. Chart Update
+        window.updateChart = function(type) {
+            const data = algorithmData[type];
+            
+            // Update Chart Data
+            radarChart.data.datasets[0].label = data.label;
+            radarChart.data.datasets[0].data = data.data;
+            
+            // Color variations
+            let color = '225, 48, 108'; // Default Pink
+            if (type === 'stories') color = '240, 148, 51'; // Orange
+            if (type === 'feed') color = '88, 81, 219'; // Purple
+
+            radarChart.data.datasets[0].backgroundColor = `rgba(${color}, 0.2)`;
+            radarChart.data.datasets[0].borderColor = `rgba(${color}, 1)`;
+            radarChart.data.datasets[0].pointBackgroundColor = `rgba(${color}, 1)`;
+            radarChart.update();
+
+            // Update Text
+            const expBox = document.getElementById('signal-explanation');
+            expBox.style.opacity = 0;
+            setTimeout(() => {
+                expBox.textContent = data.desc;
+                // Update border color of explanation box
+                expBox.className = `mt-6 p-4 bg-gray-50 text-gray-800 rounded-md text-sm border-l-4 border-[rgb(${color})]`;
+                expBox.style.opacity = 1;
+            }, 200);
+
+            // Update Buttons
+            ['reels', 'stories', 'feed'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if (t === type) {
+                    btn.classList.add('ring-2', 'ring-pink-500', 'bg-gray-100');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-pink-500', 'bg-gray-100');
+                }
+            });
+        };
+
+        // 2. Funnel Logic
+        window.setFunnelStep = function(stepNum) {
+            // Reset all
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`f-step-${i}`);
+                if (i === stepNum) {
+                    el.classList.remove('funnel-hidden');
+                    el.classList.add('funnel-active', 'border-pink-500', 'bg-white/10');
+                } else if (i < stepNum) {
+                    // Previous steps visible but dim
+                    el.classList.remove('funnel-hidden', 'funnel-active', 'border-pink-500', 'bg-white/10');
+                    el.classList.add('opacity-50', 'border-gray-600');
+                } else {
+                    // Future steps hidden
+                    el.classList.remove('funnel-active', 'border-pink-500', 'bg-white/10');
+                    el.classList.add('funnel-hidden', 'border-gray-600');
+                }
+            }
+        };
+
+        // 3. Calculator Logic
+        function calculateScore() {
+            const likes = parseInt(document.getElementById('input-likes').value);
+            const comments = parseInt(document.getElementById('input-comments').value);
+            const saves = parseInt(document.getElementById('input-saves').value);
+            const shares = parseInt(document.getElementById('input-shares').value);
+
+            // Update display numbers
+            document.getElementById('val-likes').textContent = likes;
+            document.getElementById('val-comments').textContent = comments;
+            document.getElementById('val-saves').textContent = saves;
+            document.getElementById('val-shares').textContent = shares;
+
+            // Estimated Weighting (Based on 2025 "Sends" priority)
+            // Share = 10 pts, Save = 5 pts, Comment = 3 pts, Like = 1 pt
+            const wLike = 1;
+            const wComm = 3;
+            const wSave = 5;
+            const wShare = 12; // Heavily weighted
+
+            const score = (likes * wLike) + (comments * wComm) + (saves * wSave) + (shares * wShare);
+            const maxScore = (1000 * wLike) + (200 * wComm) + (200 * wSave) + (200 * wShare); // Rough max for bar calc
+
+            // Animation for score
+            const scoreEl = document.getElementById('total-score');
+            scoreEl.textContent = score.toLocaleString();
+
+            // Calculate contribution percentages for visualization
+            const totalWeighted = score || 1;
+            const likeContrib = Math.round(((likes * wLike) / totalWeighted) * 100);
+            const shareContrib = Math.round(((shares * wShare) / totalWeighted) * 100);
+
+            document.getElementById('pct-likes').textContent = likeContrib + '%';
+            document.getElementById('bar-likes').style.width = likeContrib + '%';
+            
+            document.getElementById('pct-shares').textContent = shareContrib + '%';
+            document.getElementById('bar-shares').style.width = shareContrib + '%';
+        }
+
+        // Add listeners to inputs
+        ['input-likes', 'input-comments', 'input-saves', 'input-shares'].forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateScore);
+        });
+
+        // 4. Populate Checklist
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            checklistItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-lg border border-gray-200 shadow-sm cursor-pointer hover:border-pink-400 transition-colors";
+                div.onclick = function() {
+                    const icon = this.querySelector('.check-icon');
+                    if (icon.textContent === '⬜') {
+                        icon.textContent = '✅';
+                        this.classList.add('bg-green-50', 'border-green-300');
+                    } else {
+                        icon.textContent = '⬜';
+                        this.classList.remove('bg-green-50', 'border-green-300');
+                    }
+                };
+                div.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <span class="text-2xl">${item.icon}</span>
+                        <span class="check-icon text-xl text-gray-300">⬜</span>
+                    </div>
+                    <h4 class="font-bold text-gray-800">${item.title}</h4>
+                    <p class="text-xs text-gray-500 mt-1">${item.desc}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // 5. Strategy Logic (New)
+        window.showStrategy = function(key) {
+            const data = strategies[key];
+            const container = document.getElementById('strategy-content');
+            
+            // Generate list items
+            const focusList = data.focus.map(item => `<li class="flex items-start"><span class="mr-2 mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-400 flex-shrink-0"></span><span class="text-gray-700">${item}</span></li>`).join('');
+
+            container.innerHTML = `
+                <div class="animate-fade-in">
+                    <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
+                        <h4 class="text-xl font-bold ${data.color}">${data.title}</h4>
+                        <div class="text-xs font-bold px-3 py-1 rounded-full ${data.bg} ${data.color}">KPI: ${data.kpi}</div>
+                    </div>
+                    <div class="mb-6">
+                        <h5 class="font-bold text-gray-900 mb-3">🎯 重点アクション</h5>
+                        <ul class="space-y-3 text-sm leading-relaxed">
+                            ${focusList}
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h5 class="font-bold text-gray-800 text-sm mb-1">📅 推奨ルーティン</h5>
+                        <p class="text-gray-600 text-sm">${data.action}</p>
+                    </div>
+                </div>
+            `;
+
+            // Update Buttons
+            ['reach', 'fan', 'sales'].forEach(k => {
+                const btn = document.getElementById(`strat-btn-${k}`);
+                if (k === key) {
+                    btn.classList.remove('bg-gray-200', 'text-gray-600');
+                    btn.classList.add('bg-gray-900', 'text-white', 'shadow-md');
+                } else {
+                    btn.classList.add('bg-gray-200', 'text-gray-600');
+                    btn.classList.remove('bg-gray-900', 'text-white', 'shadow-md');
+                }
+            });
+        };
+
+        // --- INIT ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            renderChecklist();
+            calculateScore(); 
+            setFunnelStep(1); 
+            showStrategy('reach'); // Init strategy
+        });
+
+    </script>
+</body>
+</html>
